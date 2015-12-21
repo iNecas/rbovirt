@@ -34,10 +34,10 @@ module OVIRT
       @status = ((xml/'status').first.text rescue 'unknown')
       @memory = (xml/'memory').first.text
       @profile = (xml/'type').first.text
-      @cluster = Link::new(@client, (xml/'cluster').first[:id], (xml/'cluster').first[:href])
+      @cluster = (Link::new(@client, (xml/'cluster').first[:id], (xml/'cluster').first[:href]) rescue nil)
       @display = {
-        :type => (xml/'display/type').first.text,
-        :monitors => (xml/'display/monitors').first.text
+        :type => ((xml/'display/type').first.text rescue ''),
+        :monitors => ((xml/'display/monitors').first.text rescue 0)
       }
       @cores = ((xml/'cpu/topology').first[:cores].to_i * (xml/'cpu/topology').first[:sockets].to_i rescue nil)
       @storage = ((xml/'disks/disk/size').first.text rescue nil)
